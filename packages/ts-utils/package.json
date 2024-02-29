@@ -1,0 +1,12 @@
+{
+  "name": "@jeonghojeong/ts-utils",
+  "version": "0.1.2",
+  "main": "src",
+  "scripts": {
+    "build": "bun ../../scripts/build.ts",
+    "publish": "bun ../../scripts/publish.ts"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
