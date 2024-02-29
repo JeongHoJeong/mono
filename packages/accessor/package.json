@@ -1,0 +1,16 @@
+{
+  "name": "@jeonghojeong/accessor",
+  "version": "0.1.0",
+  "main": "src",
+  "scripts": {
+    "build": "bun ../../scripts/build.ts",
+    "publish": "bun ../../scripts/publish.ts"
+  },
+  "dependencies": {
+    "@jeonghojeong/ts-utils": "workspace:*",
+    "zod": "^3.22.4"
+  },
+  "devDependencies": {
+    "typescript": "^5.3.3"
+  }
+}
