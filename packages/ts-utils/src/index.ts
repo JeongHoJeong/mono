@@ -10,3 +10,9 @@ export function lazy<T>(fn: () => T): () => T {
     return value
   }
 }
+
+export function assert(condition: any, message: any): asserts condition {
+  if (!condition) {
+    throw new Error(message)
+  }
+}

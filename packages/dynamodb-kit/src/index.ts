@@ -196,6 +196,10 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
         throw new Error('Failed to retrieve')
       }
 
+      if (retrieved.Item === undefined) {
+        return undefined
+      }
+
       return zodSchema.parse(retrieved.Item) as any
     },
 
