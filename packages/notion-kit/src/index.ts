@@ -28,13 +28,12 @@ import {
 } from './schema'
 import type { Client } from '@notionhq/client'
 
+interface NotionPageMetadata {
+  uuid: string
+}
+
 export interface NotionAccessor<S extends GeneralSchema>
-  extends Accessor<
-    S,
-    {
-      uuid: string
-    }
-  > {}
+  extends Accessor<S, NotionPageMetadata> {}
 
 function extractNotionPropertyValue(
   property:
@@ -303,7 +302,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
       )
     },
 
-    async add(value: any) {
+    async add(value: any): Promise<{ _meta: NotionPageMetadata }> {
       const notionClient = await _notionClient
 
       const result = await notionClient.pages.create({
@@ -314,8 +313,10 @@ export function createNotionAccessor<NS extends NotionSchema>(
       })
 
       return {
-        // TODO: Return key, not id
-        newKey: result.id,
+        // TODO: Return key that can be used in `get`
+        _meta: {
+          uuid: result.id,
+        },
       }
     },
 

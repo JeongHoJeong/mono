@@ -72,7 +72,7 @@ export interface Accessor<S extends GeneralSchema, Metadata> {
   >
   set: (key: string, value: z.infer<ZodObjectified<S>>) => Promise<void>
   add: (value: z.infer<ZodObjectified<S>>) => Promise<{
-    newKey: string
+    _meta: Metadata
   }>
   update: (
     key: string,
