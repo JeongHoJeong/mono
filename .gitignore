@@ -1,5 +1,6 @@
-node_modules
 .env
 .temp
 .turbo
+/*.local
+node_modules
 publishing

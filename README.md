@@ -1,7 +1,3 @@
 # Mono
 
-## How to publish packages
-```
-npm login
-bun turbo run publish
-```
+Monorepo for personal utilities
