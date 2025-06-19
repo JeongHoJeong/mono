@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "@types/bun": "^1.0.7",
-    "turbo": "^1.12.4"
+    "turbo": "^2.5.4"
   },
   "scripts": {
     "check-package-jsons": "bun scripts/check-package-jsons.ts",
