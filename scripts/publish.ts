@@ -2,9 +2,10 @@ import { $ } from 'bun'
 import fs from 'node:fs'
 import {
   checkRemoteChecksum,
-  getLatestVersion,
+  getLatestPublishedVersion,
   getLocalChecksum,
 } from './npm-utils'
+import { isSemverGreaterThan } from '../packages/ts-utils/src/semver'
 
 $.throws(true)
 
@@ -32,11 +33,25 @@ async function publish() {
   } = JSON.parse(fs.readFileSync('package.json', 'utf-8'))
 
   const localVersion = packageJson.version
-  const latestVersion = await getLatestVersion(packageJson.name)
+  const latestPublishedVersion = await getLatestPublishedVersion(
+    packageJson.name
+  )
+
+  if (
+    latestPublishedVersion !== undefined &&
+    !isSemverGreaterThan(localVersion, latestPublishedVersion)
+  ) {
+    console.log(
+      `${packageJson.name}: Local version is not greater than latest published version. (${localVersion} <= ${latestPublishedVersion}) Skipping publish.`
+    )
+    return
+  }
 
   const remoteChecksum = await (async () =>
-    localVersion === latestVersion
-      ? await checkRemoteChecksum(`${packageJson.name}@${latestVersion}`)
+    localVersion === latestPublishedVersion
+      ? await checkRemoteChecksum(
+          `${packageJson.name}@${latestPublishedVersion}`
+        )
       : undefined)()
 
   const newPackageJson = {

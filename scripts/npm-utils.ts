@@ -42,7 +42,7 @@ export async function getLocalChecksum(filename: string) {
   return (await $`shasum ${filename} | awk '{ print $1 }'`).text().trim()
 }
 
-export async function getLatestVersion(packageName: string) {
+export async function getLatestPublishedVersion(packageName: string) {
   try {
     return (await $`npm view ${packageName} version`).text().trim()
   } catch (error) {
