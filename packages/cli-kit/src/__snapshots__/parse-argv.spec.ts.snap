@@ -1,0 +1,13 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`parseArgv parses arguments 1`] = `
+{
+  "arguments": [
+    "argument",
+  ],
+  "options": {
+    "name": "foo",
+    "verbose": true,
+  },
+}
+`;

@@ -1,0 +1,36 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`group distinguishes between flags and parameters 1`] = `
+{
+  "tokens": [
+    {
+      "name": "--name",
+      "type": "option",
+      "value": "foo",
+    },
+    {
+      "name": "--verbose",
+      "type": "option",
+    },
+    {
+      "type": "argument",
+      "value": "test.txt",
+    },
+  ],
+}
+`;
+
+exports[`group does not group flag as a value 1`] = `
+{
+  "tokens": [
+    {
+      "name": "--name",
+      "type": "option",
+    },
+    {
+      "name": "--verbose",
+      "type": "option",
+    },
+  ],
+}
+`;
