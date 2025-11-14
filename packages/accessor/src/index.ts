@@ -5,16 +5,16 @@ interface Cursor {
   value: any
 }
 
-export interface ListOption<S extends GeneralSchema> {
+export interface ListOption<S extends {}> {
   filter?: FilterOptionTree<S>
   sort?: SortOption<S>[]
   cursor?: Cursor
   limit?: number
 }
 
-export type FilterOption<S extends GeneralSchema, K extends keyof S> = {
-  eq?: z.infer<S[K]['type']>
-  ne?: z.infer<S[K]['type']>
+export type FilterOption<S extends {}, K extends keyof S> = {
+  eq?: S[K] extends { type: any } ? z.infer<S[K]['type']> : never
+  ne?: S[K] extends { type: any } ? z.infer<S[K]['type']> : never
   ge?: number
   gt?: number
   le?: number
@@ -31,7 +31,7 @@ export type FilterLeaf<S extends GeneralSchema> = {
   [K in keyof S]?: FilterOption<S, K>
 }
 
-export type FilterOptionTree<S extends GeneralSchema> =
+export type FilterOptionTree<S extends {}> =
   | {
       and: (FilterLeaf<S> | FilterOptionTree<S>)[]
     }
@@ -63,7 +63,7 @@ type ZodObjectified<S extends GeneralSchema> = ZodRawToZodType<
   GeneralSchemaMap<S>
 >
 
-export interface Accessor<S extends GeneralSchema, Metadata> {
+export interface Accessor<S extends {}, Metadata> {
   get: (key: string) => Promise<
     | (z.infer<ZodObjectified<S>> & {
         _meta: Metadata

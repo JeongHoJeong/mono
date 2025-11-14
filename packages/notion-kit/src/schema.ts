@@ -67,9 +67,11 @@ export type NotionSchema = {
   }
 }
 
-export type NotionSchemaToGeneralSchema<NS extends NotionSchema> = {
-  [K in keyof NS]: {
-    type: NotionFieldToZodType[NS[K]['type']]
-    isKey: NS[K]['type'] extends 'id' ? true : false
-  }
+export type NotionSchemaToGeneralSchema<NS extends {}> = {
+  [K in keyof NS]: NS extends NotionSchema
+    ? {
+        type: NotionFieldToZodType[NS[K]['type']]
+        isKey: NS[K]['type'] extends 'id' ? true : false
+      }
+    : never
 }

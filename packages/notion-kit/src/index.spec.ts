@@ -11,6 +11,9 @@ const testInputSchema = z.object({
   }),
 })
 
+/** Be careful! It runs tests against the actual Notion data sources.
+ * You need to specify the test environment variables to run the tests.
+ */
 const testInput = testInputSchema.parse({
   notionToken: process.env.TEST_NOTION_TOKEN,
   databases: {
@@ -95,7 +98,7 @@ describe(createNotionAccessor.name, () => {
             direction: 'ascending',
           },
         ],
-      })
+      } as const)
 
       // TODO: better checking
       expect(result.items).toBeArray()

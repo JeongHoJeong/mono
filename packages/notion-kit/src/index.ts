@@ -12,7 +12,7 @@ import {
   LastEditedTimePropertyItemObjectResponse,
   MultiSelectPropertyItemObjectResponse,
   NumberPropertyItemObjectResponse,
-  QueryDatabaseParameters,
+  QueryDataSourceParameters,
   RelationPropertyItemObjectResponse,
   RichTextPropertyItemObjectResponse,
   SelectPropertyItemObjectResponse,
@@ -32,7 +32,7 @@ interface NotionPageMetadata {
   uuid: string
 }
 
-export interface NotionAccessor<S extends GeneralSchema>
+export interface NotionAccessor<S extends {}>
   extends Accessor<S, NotionPageMetadata> {}
 
 function extractNotionPropertyValue(
@@ -145,7 +145,7 @@ function makeNotionCondition(condition: FilterOption<any, any>) {
 
 export function createNotionAccessor<NS extends NotionSchema>(
   getNotionClient: () => Promise<Client>,
-  databaseId: string,
+  dataSourceId: string,
   notionSchema: NS
 ): NotionAccessor<NotionSchemaToGeneralSchema<NS>> {
   const _notionClient = getNotionClient()
@@ -161,8 +161,8 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
   /** TODO: its inner types are messy and not correct. Fix it. */
   function makeNotionFilter(
-    filter: FilterOptionTree<NotionSchemaToGeneralSchema<NS>> | any
-  ): QueryDatabaseParameters['filter'] {
+    filter: FilterOptionTree<NotionSchemaToGeneralSchema<NS>>
+  ): QueryDataSourceParameters['filter'] {
     if ('or' in filter) {
       return {
         or: filter.or.flatMap(
@@ -241,8 +241,8 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
   async function getPageIdFromUniqueId(uniqueId: string) {
     const notionClient = await _notionClient
-    const retrieved = await notionClient.databases.query({
-      database_id: databaseId,
+    const retrieved = await notionClient.dataSources.query({
+      data_source_id: dataSourceId,
       filter: {
         property: 'ID',
         unique_id: {
@@ -257,8 +257,8 @@ export function createNotionAccessor<NS extends NotionSchema>(
   return {
     async get(key: string) {
       const notionClient = await _notionClient
-      const retrieved = await notionClient.databases.query({
-        database_id: databaseId,
+      const retrieved = await notionClient.dataSources.query({
+        data_source_id: dataSourceId,
         filter: {
           property: 'ID',
           unique_id: {
@@ -271,13 +271,13 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
       if (!item) {
         throw new Error(
-          `Page with ID ${key} not found in database ${databaseId}`
+          `Page with ID ${key} not found in data source ${dataSourceId}`
         )
       }
 
       if (!('properties' in item)) {
         throw new Error(
-          `Properties not found in the retrieved item: Key: ${key}, DatabaseId: ${databaseId}`
+          `Properties not found in the retrieved item: Key: ${key}, Data source ID: ${dataSourceId}`
         )
       }
 
@@ -307,7 +307,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
       const result = await notionClient.pages.create({
         parent: {
-          database_id: databaseId,
+          data_source_id: dataSourceId,
         },
         properties: makeNotionProperties(value),
       })
@@ -327,7 +327,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
       if (!pageId) {
         throw new Error(
-          `Page with ID ${key} not found in database ${databaseId}`
+          `Page with ID ${key} not found in data source ${dataSourceId}`
         )
       }
 
@@ -341,8 +341,8 @@ export function createNotionAccessor<NS extends NotionSchema>(
       const { cursor, filter, sort } = options ?? {}
 
       const notionClient = await _notionClient
-      const retrieved = await notionClient.databases.query({
-        database_id: databaseId,
+      const retrieved = await notionClient.dataSources.query({
+        data_source_id: dataSourceId,
         start_cursor: cursor?.value,
         filter: filter ? makeNotionFilter(filter) : undefined,
         sorts: sort as any,
