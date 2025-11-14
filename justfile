@@ -12,3 +12,6 @@ publish:
 
 ci:
     bun turbo run ci
+
+test:
+    bun turbo run test
