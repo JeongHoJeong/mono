@@ -1,0 +1,3 @@
+{
+  "*.{ts,tsx}": ["bun biome format", "bun biome lint"]
+}
