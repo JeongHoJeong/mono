@@ -2,6 +2,9 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["scripts/*.ts"],
   "tasks": {
+    "typecheck": {
+      "dependsOn": ["^typecheck"]
+    },
     "build": {
       "dependsOn": ["^build", "//#check-package-jsons"]
     },

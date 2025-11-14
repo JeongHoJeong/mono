@@ -2,9 +2,9 @@
 // So we keep `scripts` field same across all packages by manually checking here.
 // (Ref: https://github.com/vercel/turbo/issues/1495)
 
+import { $ } from 'bun'
 import { expect } from 'bun:test'
 import fs from 'node:fs'
-import { $ } from 'bun'
 
 const packageJsonFiles = (await $`ls packages/*/package.json`)
   .text()
@@ -22,6 +22,7 @@ await Promise.all(
     expect(parsed.scripts).toEqual({
       build: 'bun ../../scripts/build.ts',
       publish: 'bun ../../scripts/publish.ts',
+      typecheck: 'bun ../../scripts/typecheck.ts',
     })
 
     console.log(`✅ ${file} is OK`)
