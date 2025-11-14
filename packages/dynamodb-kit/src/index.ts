@@ -1,4 +1,15 @@
 import {
+  DynamoDBClient,
+  QueryCommand,
+  type AttributeValue,
+} from '@aws-sdk/client-dynamodb'
+import {
+  DynamoDBDocumentClient,
+  GetCommand,
+  PutCommand,
+  UpdateCommand,
+} from '@aws-sdk/lib-dynamodb'
+import type {
   Accessor,
   FilterLeaf,
   FilterOption,
@@ -6,15 +17,8 @@ import {
   GeneralSchema,
   ListOption,
 } from '@jeonghojeong/accessor'
-import { DynamoDBClient, QueryCommand } from '@aws-sdk/client-dynamodb'
-import {
-  DynamoDBDocumentClient,
-  GetCommand,
-  PutCommand,
-  UpdateCommand,
-} from '@aws-sdk/lib-dynamodb'
 import { z } from 'zod'
-import { DynamoDBSchema, DynamoDBSchemaToGeneralSchema } from './schema'
+import type { DynamoDBSchema, DynamoDBSchemaToGeneralSchema } from './schema'
 
 function isOKHttpStatusCode(code: number | undefined) {
   if (code === undefined) {
@@ -27,7 +31,8 @@ function isOKHttpStatusCode(code: number | undefined) {
 function makeUnitExpression(
   attrName: string,
   valueName: string,
-  filterOption: FilterOption<any, any>
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
+  filterOption: FilterOption<any, any>,
 ) {
   if ('eq' in filterOption) {
     return `#${attrName} = :${valueName}`
@@ -48,12 +53,13 @@ function makeUnitExpression(
   }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: Too complex
 function extractValueFromFilterOption(option: FilterOption<any, any>) {
   const entries = Object.entries(option)
   if (entries.length !== 1) {
     throw new Error('Invalid filter leaf')
   }
-  const value = entries[0]![1]
+  const value = entries[0][1]
 
   if (value === null || value === undefined) {
     throw new Error('Invalid filter leaf')
@@ -77,9 +83,11 @@ function extractValueFromFilterOption(option: FilterOption<any, any>) {
 /** Syntax ref: https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/Expressions.OperatorsAndFunctions.html#Expressions.OperatorsAndFunctions.Syntax */
 export function makeFilter(
   joinBy: 'and' | 'or',
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
   subFilters: (FilterOptionTree<any> | FilterLeaf<any>)[],
-  variablePrefix: string = 'v'
+  variablePrefix: string = 'v',
 ): {
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
   attributeValues: Record<string, any>
   attributeNames: Record<string, string>
   expression: string
@@ -88,13 +96,15 @@ export function makeFilter(
     (subFilter, idx) => {
       // When it's a tree
       if ('and' in subFilter || 'or' in subFilter) {
+        // biome-ignore lint/suspicious/noExplicitAny: Too complex
         const subSubFilters: (FilterOptionTree<any> | FilterLeaf<any>)[] =
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           (subFilter as any).and ?? ((subFilter as any).or as any)
 
         const { expression, attributeNames, attributeValues } = makeFilter(
           joinBy,
           subSubFilters,
-          `${variablePrefix}_${idx}`
+          `${variablePrefix}_${idx}`,
         )
 
         return {
@@ -107,9 +117,9 @@ export function makeFilter(
       // When it's a leaf
       const entries = Object.entries(subFilter)
       if (entries.length === 1) {
-        const entry = entries[0]!
+        const entry = entries[0]
         const key = entry[0]
-        const value = entry[1]!
+        const value = entry[1]
         const variableName = `${variablePrefix}_${idx}_${key}`
 
         return {
@@ -129,10 +139,10 @@ export function makeFilter(
               [key]: value,
             }
           }),
-          variablePrefix
+          variablePrefix,
         )
       }
-    }
+    },
   )
 
   const expression = `(${expressions
@@ -140,10 +150,10 @@ export function makeFilter(
     .join(` ${joinBy} `)})`
   return {
     attributeValues: Object.fromEntries(
-      expressions.flatMap((e) => Object.entries(e.attributeValues))
+      expressions.flatMap((e) => Object.entries(e.attributeValues)),
     ),
     attributeNames: Object.fromEntries(
-      expressions.flatMap((e) => Object.entries(e.attributeNames))
+      expressions.flatMap((e) => Object.entries(e.attributeNames)),
     ),
     expression,
   }
@@ -165,12 +175,12 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
     }
     partition: string
   },
-  schema: S
+  schema: S,
 ): DynamoDBAccessor<DynamoDBSchemaToGeneralSchema<S>> {
   const zodSchema = z.object(
     Object.fromEntries(
-      Object.entries(schema).map(([key, value]) => [key, value.type])
-    )
+      Object.entries(schema).map(([key, value]) => [key, value.type]),
+    ),
   )
 
   const client = new DynamoDBClient({
@@ -188,7 +198,7 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
             [tableInfo.partitionKey]: partition,
             [tableInfo.rangeKey]: key,
           },
-        })
+        }),
       )
 
       if (!isOKHttpStatusCode(retrieved.$metadata.httpStatusCode)) {
@@ -200,9 +210,11 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
         return undefined
       }
 
+      // biome-ignore lint/suspicious/noExplicitAny: zodSchema.parse ensures outer type is correct
       return zodSchema.parse(retrieved.Item) as any
     },
 
+    // biome-ignore lint/suspicious/noExplicitAny: TODO - replace it with unknown
     async set(key: string, value: any) {
       // TODO: defend it to not use hash_key and range_key directly
 
@@ -215,7 +227,7 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
             [tableInfo.partitionKey]: partition,
             [tableInfo.rangeKey]: key,
           },
-        })
+        }),
       )
 
       if (!isOKHttpStatusCode(updated.$metadata.httpStatusCode)) {
@@ -224,6 +236,7 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
       }
     },
 
+    // biome-ignore lint/suspicious/noExplicitAny: TODO - replace it with unknown
     async update(key: string, value: any) {
       const updated = await ddbDocClient.send(
         new UpdateCommand({
@@ -237,12 +250,12 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
             .join(', ')}`,
           ExpressionAttributeNames: Object.fromEntries(
             // TODO: maybe restrict keys to not contain special characters like `.`, `$`, space, etc.
-            Object.keys(value).map((key) => [`#${key}`, key])
+            Object.keys(value).map((key) => [`#${key}`, key]),
           ),
           ExpressionAttributeValues: Object.fromEntries(
-            Object.entries(value).map(([key, value]) => [':' + key, value])
+            Object.entries(value).map(([key, value]) => [`:${key}`, value]),
           ),
-        })
+        }),
       )
 
       if (!isOKHttpStatusCode(updated.$metadata.httpStatusCode)) {
@@ -269,10 +282,10 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
         filter === undefined
           ? undefined
           : 'and' in filter
-          ? makeFilter('and', filter.and)
-          : 'or' in filter
-          ? makeFilter('or', filter.or)
-          : undefined
+            ? makeFilter('and', filter.and)
+            : 'or' in filter
+              ? makeFilter('or', filter.or)
+              : undefined
 
       const res = await ddbDocClient.send(
         new QueryCommand({
@@ -294,11 +307,11 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
             ? effectiveSort.direction === 'ascending'
               ? true
               : effectiveSort.direction === 'descending'
-              ? false
-              : undefined
+                ? false
+                : undefined
             : undefined,
           Limit: limit,
-        })
+        }),
       )
 
       if (!isOKHttpStatusCode(res.$metadata.httpStatusCode)) {
@@ -309,13 +322,15 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
         res.Items?.map((item) =>
           zodSchema.parse(
             Object.fromEntries(
-              Object.entries(item).map(([key, value]: [string, any]) => [
-                key,
-                // TODO: handle various types correctly
-                value.S ?? value.N ?? value.BOOL,
-              ])
-            )
-          )
+              Object.entries(item).map(
+                ([key, value]: [string, AttributeValue]) => [
+                  key,
+                  // TODO: handle various types correctly
+                  value.S ?? value.N ?? value.BOOL,
+                ],
+              ),
+            ),
+          ),
         ) ?? []
 
       return {
@@ -324,6 +339,7 @@ export function createDynamoDBAccessor<S extends DynamoDBSchema>(
           value: res.LastEvaluatedKey,
         },
         items,
+        // biome-ignore lint/suspicious/noExplicitAny: zodSchema.parse ensures outer type is correct
       } as any
     },
 

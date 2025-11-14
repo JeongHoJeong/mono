@@ -56,7 +56,8 @@ export const NotionFieldToZodType: {
   Object.entries(_NotionFieldToZodType).map(([key, value]) => [
     key,
     value.optional(),
-  ])
+  ]),
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex to type
 ) as any
 
 export type NotionFieldToZodType = typeof NotionFieldToZodType

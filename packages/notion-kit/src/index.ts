@@ -1,12 +1,11 @@
-import { z } from 'zod'
-import {
+import type {
+  Accessor,
   FilterOption,
   FilterOptionTree,
   ListOption,
-  Accessor,
-  GeneralSchema,
 } from '@jeonghojeong/accessor'
-import {
+import type { Client } from '@notionhq/client'
+import type {
   CreatedTimePropertyItemObjectResponse,
   DatePropertyItemObjectResponse,
   LastEditedTimePropertyItemObjectResponse,
@@ -21,12 +20,12 @@ import {
   UniqueIdPropertyItemObjectResponse,
   UrlPropertyItemObjectResponse,
 } from '@notionhq/client/build/src/api-endpoints'
+import { z } from 'zod'
 import {
   NotionFieldToZodType,
-  NotionSchema,
-  NotionSchemaToGeneralSchema,
+  type NotionSchema,
+  type NotionSchemaToGeneralSchema,
 } from './schema'
-import type { Client } from '@notionhq/client'
 
 interface NotionPageMetadata {
   uuid: string
@@ -48,12 +47,13 @@ function extractNotionPropertyValue(
     | MultiSelectPropertyItemObjectResponse
     | SelectPropertyItemObjectResponse
     | LastEditedTimePropertyItemObjectResponse
-    | DatePropertyItemObjectResponse
+    | DatePropertyItemObjectResponse,
 ) {
   return (
     (() => {
       if (property.type === 'title') {
         return (
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           property.title.plain_text ?? (property as any).title[0]?.plain_text
         )
       } else if (property.type === 'number') {
@@ -63,6 +63,7 @@ function extractNotionPropertyValue(
       } else if (property.type === 'rich_text') {
         return (
           property.rich_text.plain_text ??
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           (property as any).rich_text[0]?.plain_text
         )
       } else if (property.type === 'relation') {
@@ -84,11 +85,17 @@ function extractNotionPropertyValue(
         return property.date?.start ? new Date(property.date?.start) : undefined
       }
       // TODO: provide more context
-      throw new Error(`Not implemented: ${(property as any).type}`)
+      throw new Error(
+        `Not implemented: ${
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
+          (property as any).type
+        }`,
+      )
     })() ?? undefined
   )
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: Too complex
 function makeNotionCondition(condition: FilterOption<any, any>) {
   if ('eq' in condition) {
     return {
@@ -146,7 +153,7 @@ function makeNotionCondition(condition: FilterOption<any, any>) {
 export function createNotionAccessor<NS extends NotionSchema>(
   getNotionClient: () => Promise<Client>,
   dataSourceId: string,
-  notionSchema: NS
+  notionSchema: NS,
 ): NotionAccessor<NotionSchemaToGeneralSchema<NS>> {
   const _notionClient = getNotionClient()
 
@@ -155,18 +162,19 @@ export function createNotionAccessor<NS extends NotionSchema>(
       Object.entries(notionSchema).map(([key, { type }]) => [
         key,
         NotionFieldToZodType[type],
-      ])
-    )
+      ]),
+    ),
   )
 
   /** TODO: its inner types are messy and not correct. Fix it. */
   function makeNotionFilter(
-    filter: FilterOptionTree<NotionSchemaToGeneralSchema<NS>>
+    filter: FilterOptionTree<NotionSchemaToGeneralSchema<NS>>,
   ): QueryDataSourceParameters['filter'] {
     if ('or' in filter) {
       return {
         or: filter.or.flatMap(
-          (subFilter: any) => makeNotionFilter(subFilter as any) as any
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
+          (subFilter: any) => makeNotionFilter(subFilter as any) as any,
         ),
       }
     }
@@ -174,7 +182,8 @@ export function createNotionAccessor<NS extends NotionSchema>(
     if ('and' in filter) {
       return {
         and: filter.and.flatMap(
-          (subFilter: any) => makeNotionFilter(subFilter as any) as any
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
+          (subFilter: any) => makeNotionFilter(subFilter as any) as any,
         ),
       }
     }
@@ -189,7 +198,9 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
         const condition: FilterOption<
           NotionSchemaToGeneralSchema<NS>,
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           any
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
         > = _condition as any
 
         return [
@@ -199,12 +210,14 @@ export function createNotionAccessor<NS extends NotionSchema>(
             [notionType]: makeNotionCondition(condition),
           },
         ]
+        // biome-ignore lint/suspicious/noExplicitAny: Too complex
       }) as any
     }
 
     throw new Error('Not a valid filter option tree.')
   }
 
+  // biome-ignore lint/suspicious/noExplicitAny: TODO - replace it with unknown
   function makeNotionProperties(values: any) {
     return Object.fromEntries(
       Object.entries(values).flatMap(([propertyName, value]) => {
@@ -228,14 +241,15 @@ export function createNotionAccessor<NS extends NotionSchema>(
                 notionType === 'title'
                   ? [{ text: { content: value } }]
                   : notionType === 'rich_text'
-                  ? [{ text: { content: value } }]
-                  : notionType === 'status'
-                  ? { name: value }
-                  : value,
+                    ? [{ text: { content: value } }]
+                    : notionType === 'status'
+                      ? { name: value }
+                      : value,
             },
           ],
         ]
-      })
+      }),
+      // biome-ignore lint/suspicious/noExplicitAny: Too complex
     ) as any
   }
 
@@ -271,21 +285,22 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
       if (!item) {
         throw new Error(
-          `Page with ID ${key} not found in data source ${dataSourceId}`
+          `Page with ID ${key} not found in data source ${dataSourceId}`,
         )
       }
 
       if (!('properties' in item)) {
         throw new Error(
-          `Properties not found in the retrieved item: Key: ${key}, Data source ID: ${dataSourceId}`
+          `Properties not found in the retrieved item: Key: ${key}, Data source ID: ${dataSourceId}`,
         )
       }
 
       const plainValues = Object.fromEntries(
         Object.entries(item.properties ?? {}).map(
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           ([key, value]: [string, any]) =>
-            [key, extractNotionPropertyValue(value)] as const
-        )
+            [key, extractNotionPropertyValue(value)] as const,
+        ),
       )
 
       return {
@@ -293,15 +308,17 @@ export function createNotionAccessor<NS extends NotionSchema>(
         _meta: {
           uuid: item.id,
         },
+        // biome-ignore lint/suspicious/noExplicitAny: zodSchema.parse ensures outer type is correct
       } as any
     },
 
     async set() {
       throw new Error(
-        'It is not possible to create a new page specifying the unique_id in Notion.'
+        'It is not possible to create a new page specifying the unique_id in Notion.',
       )
     },
 
+    // biome-ignore lint/suspicious/noExplicitAny: TODO - replace it with unknown
     async add(value: any): Promise<{ _meta: NotionPageMetadata }> {
       const notionClient = await _notionClient
 
@@ -320,6 +337,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
       }
     },
 
+    // biome-ignore lint/suspicious/noExplicitAny: TODO - replace it with unknown
     async update(key: string, value: any) {
       const notionClient = await _notionClient
 
@@ -327,7 +345,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
 
       if (!pageId) {
         throw new Error(
-          `Page with ID ${key} not found in data source ${dataSourceId}`
+          `Page with ID ${key} not found in data source ${dataSourceId}`,
         )
       }
 
@@ -345,17 +363,20 @@ export function createNotionAccessor<NS extends NotionSchema>(
         data_source_id: dataSourceId,
         start_cursor: cursor?.value,
         filter: filter ? makeNotionFilter(filter) : undefined,
+        // biome-ignore lint/suspicious/noExplicitAny: Too complex
         sorts: sort as any,
       })
 
       const items = retrieved.results.map((notionItem) => {
         const plainValues = Object.fromEntries(
+          // biome-ignore lint/suspicious/noExplicitAny: Too complex
           Object.entries((notionItem as any)?.properties ?? {})
             .filter(([key]) => key in notionSchema)
             .map(
+              // biome-ignore lint/suspicious/noExplicitAny: Too complex
               ([key, value]: [string, any]) =>
-                [key, extractNotionPropertyValue(value)] as const
-            )
+                [key, extractNotionPropertyValue(value)] as const,
+            ),
         )
 
         return {
@@ -363,6 +384,7 @@ export function createNotionAccessor<NS extends NotionSchema>(
           _meta: {
             uuid: notionItem.id,
           },
+          // biome-ignore lint/suspicious/noExplicitAny: zodSchema.parse ensures outer type is correct
         } as any
       })
 

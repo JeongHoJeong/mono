@@ -4,7 +4,7 @@ async function checkIfPackageExists(packageName: string) {
   try {
     await $`npm view ${packageName}`
     return true
-  } catch (error) {
+  } catch {
     return false
   }
 }
@@ -45,7 +45,7 @@ export async function getLocalChecksum(filename: string) {
 export async function getLatestPublishedVersion(packageName: string) {
   try {
     return (await $`npm view ${packageName} version`).text().trim()
-  } catch (error) {
+  } catch {
     return undefined
   }
 }

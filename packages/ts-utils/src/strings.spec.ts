@@ -7,7 +7,7 @@ type TestCase = [
   {
     numSegments?: number
     segments?: string[]
-  }
+  },
 ]
 
 describe(splitWithSizeLimit.name, () => {
@@ -90,7 +90,7 @@ describe(splitWithSizeLimit.name, () => {
 
     // Expect nothing is changed except line breaks.
     expect(result.join('').replaceAll('\n', '')).toBe(
-      testString.replaceAll('\n', '')
+      testString.replaceAll('\n', ''),
     )
   })
 

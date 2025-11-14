@@ -1,7 +1,8 @@
-import { z } from 'zod'
+import type { z } from 'zod'
 
 interface Cursor {
   _type: 'Cursor'
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
   value: any
 }
 
@@ -13,7 +14,9 @@ export interface ListOption<S extends {}> {
 }
 
 export type FilterOption<S extends {}, K extends keyof S> = {
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
   eq?: S[K] extends { type: any } ? z.infer<S[K]['type']> : never
+  // biome-ignore lint/suspicious/noExplicitAny: Too complex
   ne?: S[K] extends { type: any } ? z.infer<S[K]['type']> : never
   ge?: number
   gt?: number
@@ -76,7 +79,7 @@ export interface Accessor<S extends {}, Metadata> {
   }>
   update: (
     key: string,
-    value: Partial<z.infer<ZodObjectified<S>>>
+    value: Partial<z.infer<ZodObjectified<S>>>,
   ) => Promise<void>
   list: (options?: ListOption<S>) => Promise<{
     cursor: Cursor

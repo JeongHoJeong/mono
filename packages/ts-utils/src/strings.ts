@@ -3,7 +3,7 @@
  */
 export function splitWithSizeLimit(
   string: string,
-  maxLengthPerSegment: number
+  maxLengthPerSegment: number,
 ) {
   // Check if maxLengthPerSegment is integer.
   if (!Number.isInteger(maxLengthPerSegment)) {
@@ -33,7 +33,7 @@ export function splitWithSizeLimit(
     return result
   })
 
-  let divideIndicies: number[] = []
+  const divideIndicies: number[] = []
   let lengthSum = 0
 
   // Divide by segments
@@ -49,12 +49,10 @@ export function splitWithSizeLimit(
 
   // Slice by divideIndicies, then join them into segments.
   const segments = divideIndicies.map((divideIndex, idx) => {
-    return (
-      lines
-        .slice(idx === 0 ? 0 : divideIndicies[idx - 1], divideIndex)
-        // Caveat: If we only use join, then last line doesn't have line break. So to be precise, we need to add it.
-        .join('\n') + '\n'
-    )
+    return `${lines
+      .slice(idx === 0 ? 0 : divideIndicies[idx - 1], divideIndex)
+      // Caveat: If we only use join, then last line doesn't have line break. So to be precise, we need to add it.
+      .join('\n')}\n`
   })
 
   // We need to consider last segment.

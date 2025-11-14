@@ -1,11 +1,11 @@
 import { $ } from 'bun'
 import fs from 'node:fs'
+import { isSemverGreaterThan } from '../packages/ts-utils/src/semver'
 import {
   checkRemoteChecksum,
   getLatestPublishedVersion,
   getLocalChecksum,
 } from './npm-utils'
-import { isSemverGreaterThan } from '../packages/ts-utils/src/semver'
 
 $.throws(true)
 
@@ -16,7 +16,7 @@ function removeWorkspaceDeps(dependencies: Record<string, string>) {
         return [name, '*']
       }
       return [name, version]
-    })
+    }),
   )
 }
 
@@ -34,7 +34,7 @@ async function publish() {
 
   const localVersion = packageJson.version
   const latestPublishedVersion = await getLatestPublishedVersion(
-    packageJson.name
+    packageJson.name,
   )
 
   if (
@@ -42,7 +42,7 @@ async function publish() {
     !isSemverGreaterThan(localVersion, latestPublishedVersion)
   ) {
     console.log(
-      `${packageJson.name}: Local version is not greater than latest published version. (${localVersion} <= ${latestPublishedVersion}) Skipping publish.`
+      `${packageJson.name}: Local version is not greater than latest published version. (${localVersion} <= ${latestPublishedVersion}) Skipping publish.`,
     )
     return
   }
@@ -50,7 +50,7 @@ async function publish() {
   const remoteChecksum = await (async () =>
     localVersion === latestPublishedVersion
       ? await checkRemoteChecksum(
-          `${packageJson.name}@${latestPublishedVersion}`
+          `${packageJson.name}@${latestPublishedVersion}`,
         )
       : undefined)()
 
@@ -72,7 +72,7 @@ async function publish() {
 
   fs.writeFileSync(
     'publishing/package.json',
-    JSON.stringify(newPackageJson, null, 2)
+    JSON.stringify(newPackageJson, null, 2),
   )
 
   $.cwd('./publishing')
@@ -90,7 +90,7 @@ async function publish() {
       return
     } else {
       console.log(
-        `Checksums are different. (Local: ${localChecksum} !== Remote: ${remoteChecksum})`
+        `Checksums are different. (Local: ${localChecksum} !== Remote: ${remoteChecksum})`,
       )
     }
   }

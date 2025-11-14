@@ -30,7 +30,7 @@ test.skipIf(!process.env.ALLOW_SIDE_EFFECTS_IN_TEST)(
       accessorTableInfo.success,
       'error' in accessorTableInfo
         ? accessorTableInfo.error
-        : `Failed to parse DynamoDB table info`
+        : `Failed to parse DynamoDB table info`,
     )
 
     const accessor = createDynamoDBAccessor(accessorTableInfo.data, {
@@ -49,5 +49,5 @@ test.skipIf(!process.env.ALLOW_SIDE_EFFECTS_IN_TEST)(
       _meta: undefined,
       value: 'foo',
     })
-  }
+  },
 )

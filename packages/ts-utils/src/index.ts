@@ -11,6 +11,7 @@ export function lazy<T>(fn: () => T): () => T {
   }
 }
 
+// biome-ignore lint/suspicious/noExplicitAny: To utilize `asserts` keyword.
 export function assert(condition: any, message: any): asserts condition {
   if (!condition) {
     throw new Error(message)
@@ -21,7 +22,7 @@ export function sequence<T>(promises: (() => Promise<T>)[]): Promise<T[]> {
   return promises.reduce<Promise<T[]>>(
     (acc, promise) =>
       acc.then((results) => promise().then((result) => [...results, result])),
-    Promise.resolve([])
+    Promise.resolve([]),
   )
 }
 

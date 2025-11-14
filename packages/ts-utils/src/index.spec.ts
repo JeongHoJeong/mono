@@ -1,4 +1,4 @@
-import { test, expect } from 'bun:test'
+import { expect, test } from 'bun:test'
 import { lazy, sequence } from './index'
 
 test(lazy.name, () => {
@@ -7,7 +7,7 @@ test(lazy.name, () => {
 })
 
 test(sequence.name, async () => {
-  let values: number[] = []
+  const values: number[] = []
 
   async function appendValueLater(value: number, delay: number) {
     await new Promise((resolve) => setTimeout(resolve, delay))

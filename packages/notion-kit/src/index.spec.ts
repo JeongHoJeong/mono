@@ -34,7 +34,7 @@ describe(createNotionAccessor.name, () => {
         숫자: {
           type: 'number',
         },
-      }
+      },
     )
 
     const testItemId = '4'
@@ -73,7 +73,7 @@ describe(createNotionAccessor.name, () => {
         ID: {
           type: 'id',
         },
-      }
+      },
     )
 
     {
