@@ -1,6 +1,9 @@
 {
   "compilerOptions": {
     "outDir": "dist",
+    "target": "ESNext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "declaration": true
   },
   "include": ["src/**/*"],

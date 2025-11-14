@@ -1,5 +1,5 @@
-import { describe, test, expect } from 'bun:test'
-import { splitWithSizeLimit } from './strings'
+import { describe, expect, test } from 'bun:test'
+import { splitWithSizeLimit } from './split-with-size-limit'
 
 type TestCase = [
   testString: string,

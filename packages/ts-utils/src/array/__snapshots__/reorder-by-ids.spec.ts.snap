@@ -1,0 +1,40 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`reorderByIds reorders array by given ids 1`] = `
+[
+  {
+    "id": 3,
+    "name": "third",
+  },
+  {
+    "id": 1,
+    "name": "first",
+  },
+  {
+    "id": 2,
+    "name": "second",
+  },
+]
+`;
+
+exports[`reorderByIds filters out items not in ids array 1`] = `
+[
+  {
+    "id": 1,
+    "name": "first",
+  },
+  {
+    "id": 3,
+    "name": "third",
+  },
+]
+`;
+
+exports[`reorderByIds handles missing ids gracefully 1`] = `
+[
+  {
+    "id": 1,
+    "name": "first",
+  },
+]
+`;

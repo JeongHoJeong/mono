@@ -1,6 +1,6 @@
 import { $ } from 'bun'
 import fs from 'node:fs'
-import { isSemverGreaterThan } from '../packages/ts-utils/src/semver'
+import { isSemverGreaterThan } from '../packages/ts-utils'
 import {
   checkRemoteChecksum,
   getLatestPublishedVersion,
