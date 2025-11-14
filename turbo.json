@@ -2,17 +2,18 @@
   "$schema": "https://turbo.build/schema.json",
   "globalDependencies": ["scripts/*.ts"],
   "tasks": {
-    "typecheck": {
-      "dependsOn": ["^typecheck"]
+    "ci": {
+      "dependsOn": ["lint", "format", "typecheck", "test"]
     },
-    "test": {
-      "dependsOn": ["^test"]
-    },
+    "lint": {},
+    "format": {},
+    "typecheck": {},
+    "test": {},
     "build": {
-      "dependsOn": ["^build", "//#check-package-jsons"]
+      "dependsOn": ["ci", "^build", "//#check-package-jsons"]
     },
     "publish": {
-      "dependsOn": ["test", "build", "^publish", "//#check-package-jsons"]
+      "dependsOn": ["build", "^publish", "//#check-package-jsons"]
     },
     "//#check-package-jsons": {}
   }

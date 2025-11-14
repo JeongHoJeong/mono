@@ -10,17 +10,5 @@ build:
 publish:
     bun turbo run publish
 
-[parallel]
-ci: lint format test
-
-lint:
-    bun biome lint
-
-format:
-    bun biome format
-
-typecheck:
-    bun turbo run typecheck
-
-test:
-    bun turbo run test
+ci:
+    bun turbo run ci
