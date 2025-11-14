@@ -1,0 +1,50 @@
+// Bun Snapshot v1, https://bun.sh/docs/test/snapshots
+
+exports[`mergeByKey merges objects with overlapping keys 1`] = `
+{
+  "a": {
+    "w": 4,
+    "x": 1,
+    "y": 10,
+  },
+  "b": {
+    "z": 3,
+  },
+  "c": {
+    "m": 5,
+  },
+}
+`;
+
+exports[`mergeByKey handles objects with no overlapping keys 1`] = `
+{
+  "a": {
+    "x": 1,
+  },
+  "b": {
+    "y": 2,
+  },
+  "c": {
+    "z": 3,
+  },
+  "d": {
+    "w": 4,
+  },
+}
+`;
+
+exports[`mergeByKey handles empty objects 1`] = `
+{
+  "a": {
+    "x": 1,
+  },
+}
+`;
+
+exports[`mergeByKey preserves non-object values 1`] = `
+{
+  "a": "override",
+  "b": 42,
+  "c": true,
+}
+`;
