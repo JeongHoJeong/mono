@@ -10,9 +10,11 @@
     "typecheck": {},
     "test": {},
     "build": {
+      "cache": false,
       "dependsOn": ["ci", "^build", "//#check-package-jsons"]
     },
     "publish": {
+      "cache": false,
       "dependsOn": ["build", "^publish", "//#check-package-jsons"]
     },
     "//#check-package-jsons": {}
