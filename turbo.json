@@ -5,11 +5,14 @@
     "typecheck": {
       "dependsOn": ["^typecheck"]
     },
+    "test": {
+      "dependsOn": ["^test"]
+    },
     "build": {
       "dependsOn": ["^build", "//#check-package-jsons"]
     },
     "publish": {
-      "dependsOn": ["build", "^publish", "//#check-package-jsons"]
+      "dependsOn": ["test", "build", "^publish", "//#check-package-jsons"]
     },
     "//#check-package-jsons": {}
   }

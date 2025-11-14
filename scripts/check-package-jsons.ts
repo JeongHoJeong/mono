@@ -23,6 +23,7 @@ await Promise.all(
       build: 'bun ../../scripts/build.ts',
       publish: 'bun ../../scripts/publish.ts',
       typecheck: 'bun ../../scripts/typecheck.ts',
+      test: 'bun ../../scripts/test.ts',
     })
 
     console.log(`✅ ${file} is OK`)
