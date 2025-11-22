@@ -1,6 +1,6 @@
 {
   "name": "@jeonghojeong/accessor",
-  "version": "0.1.2",
+  "version": "0.1.7",
   "main": "src",
   "scripts": {
     "test": "bun ../../scripts/test.ts",
@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@jeonghojeong/ts-utils": "workspace:*",
-    "zod": "^3.22.4"
+    "zod": "*"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

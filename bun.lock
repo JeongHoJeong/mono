@@ -17,7 +17,7 @@
       "version": "0.1.2",
       "dependencies": {
         "@jeonghojeong/ts-utils": "workspace:*",
-        "zod": "^3.22.4",
+        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
@@ -25,7 +25,7 @@
     },
     "packages/cli-kit": {
       "name": "@jeonghojeong/cli-kit",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "dependencies": {
         "@jeonghojeong/ts-utils": "workspace:*",
       },
@@ -39,9 +39,9 @@
       "dependencies": {
         "@aws-sdk/client-dynamodb": "^3.506.0",
         "@aws-sdk/lib-dynamodb": "^3.506.0",
-        "@jeonghojeong/accessor": "packages/accessor",
-        "@jeonghojeong/ts-utils": "packages/ts-utils",
-        "zod": "^3.22.4",
+        "@jeonghojeong/accessor": "workspace:*",
+        "@jeonghojeong/ts-utils": "workspace:*",
+        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
@@ -54,7 +54,7 @@
         "@jeonghojeong/accessor": "workspace:*",
         "@jeonghojeong/ts-utils": "workspace:*",
         "@notionhq/client": "^5.4.0",
-        "zod": "^4.1.12",
+        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
@@ -62,7 +62,7 @@
     },
     "packages/ts-utils": {
       "name": "@jeonghojeong/ts-utils",
-      "version": "0.1.4",
+      "version": "0.1.7",
       "devDependencies": {
         "typescript": "^5.3.3",
       },
@@ -359,7 +359,7 @@
 
     "yaml": ["yaml@2.8.1", "", { "bin": { "yaml": "bin.mjs" } }, "sha512-lcYcMxX2PO9XMGvAJkJ3OsNMw+/7FKes7/hgerGUYWIoWu5j/+YQqcZr5JnPZWzOsEBgMbSbiSTn/dv/69Mkpw=="],
 
-    "zod": ["zod@3.22.4", "", {}, "sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg=="],
+    "zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
 
     "@aws-crypto/crc32/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
 
@@ -372,8 +372,6 @@
     "@aws-crypto/supports-web-crypto/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
 
     "@aws-crypto/util/tslib": ["tslib@1.14.1", "", {}, "sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg=="],
-
-    "@jeonghojeong/notion-kit/zod": ["zod@4.1.12", "", {}, "sha512-JInaHOamG8pt5+Ey8kGmdcAcg3OL9reK8ltczgHTAwNhMys/6ThXHityHxVV2p3fkw/c+MAvBHFVYHFZDmjMCQ=="],
 
     "@smithy/middleware-retry/uuid": ["uuid@8.3.2", "", { "bin": { "uuid": "dist/bin/uuid" } }, "sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg=="],
 
