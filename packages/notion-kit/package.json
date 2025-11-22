@@ -1,6 +1,6 @@
 {
   "name": "@jeonghojeong/notion-kit",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "src",
   "scripts": {
     "test": "bun ../../scripts/test.ts",
@@ -11,7 +11,9 @@
   "dependencies": {
     "@jeonghojeong/ts-utils": "workspace:*",
     "@jeonghojeong/accessor": "workspace:*",
-    "@notionhq/client": "^5.4.0",
+    "@notionhq/client": "^5.4.0"
+  },
+  "peerDependencies": {
     "zod": "*"
   },
   "devDependencies": {

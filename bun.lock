@@ -14,18 +14,20 @@
     },
     "packages/accessor": {
       "name": "@jeonghojeong/accessor",
-      "version": "0.1.2",
+      "version": "0.1.8",
       "dependencies": {
         "@jeonghojeong/ts-utils": "workspace:*",
-        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
       },
+      "peerDependencies": {
+        "zod": "*",
+      },
     },
     "packages/cli-kit": {
       "name": "@jeonghojeong/cli-kit",
-      "version": "0.1.1",
+      "version": "0.1.8",
       "dependencies": {
         "@jeonghojeong/ts-utils": "workspace:*",
       },
@@ -35,34 +37,38 @@
     },
     "packages/dynamodb-kit": {
       "name": "@jeonghojeong/dynamodb-kit",
-      "version": "0.1.1",
+      "version": "0.1.8",
       "dependencies": {
         "@aws-sdk/client-dynamodb": "^3.506.0",
         "@aws-sdk/lib-dynamodb": "^3.506.0",
         "@jeonghojeong/accessor": "workspace:*",
         "@jeonghojeong/ts-utils": "workspace:*",
-        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
+      },
+      "peerDependencies": {
+        "zod": "*",
       },
     },
     "packages/notion-kit": {
       "name": "@jeonghojeong/notion-kit",
-      "version": "0.1.2",
+      "version": "0.1.8",
       "dependencies": {
         "@jeonghojeong/accessor": "workspace:*",
         "@jeonghojeong/ts-utils": "workspace:*",
         "@notionhq/client": "^5.4.0",
-        "zod": "*",
       },
       "devDependencies": {
         "typescript": "^5.3.3",
       },
+      "peerDependencies": {
+        "zod": "*",
+      },
     },
     "packages/ts-utils": {
       "name": "@jeonghojeong/ts-utils",
-      "version": "0.1.7",
+      "version": "0.1.8",
       "devDependencies": {
         "typescript": "^5.3.3",
       },

@@ -1,6 +1,6 @@
 {
   "name": "@jeonghojeong/dynamodb-kit",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "src",
   "scripts": {
     "test": "bun ../../scripts/test.ts",
@@ -11,9 +11,11 @@
   "dependencies": {
     "@jeonghojeong/ts-utils": "workspace:*",
     "@jeonghojeong/accessor": "workspace:*",
-    "zod": "*",
     "@aws-sdk/client-dynamodb": "^3.506.0",
     "@aws-sdk/lib-dynamodb": "^3.506.0"
+  },
+  "peerDependencies": {
+    "zod": "*"
   },
   "devDependencies": {
     "typescript": "^5.3.3"

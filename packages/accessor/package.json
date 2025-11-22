@@ -1,6 +1,6 @@
 {
   "name": "@jeonghojeong/accessor",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "main": "src",
   "scripts": {
     "test": "bun ../../scripts/test.ts",
@@ -9,7 +9,9 @@
     "publish": "bun ../../scripts/publish.ts"
   },
   "dependencies": {
-    "@jeonghojeong/ts-utils": "workspace:*",
+    "@jeonghojeong/ts-utils": "workspace:*"
+  },
+  "peerDependencies": {
     "zod": "*"
   },
   "devDependencies": {
