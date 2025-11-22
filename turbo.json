@@ -8,7 +8,20 @@
     "lint": {},
     "format": {},
     "typecheck": {},
-    "test": {},
+    "test": {
+      "env": [
+        "AWS_PROFILE",
+        "ALLOW_SIDE_EFFECTS_IN_TEST",
+        "TEST_DYNAMODB_TABLE_NAME",
+        "TEST_DYNAMODB_PARTITION_KEY",
+        "TEST_DYNAMODB_RANGE_KEY",
+        "TEST_DYNAMODB_REGION",
+        "TEST_DYNAMODB_PARTITION",
+        "TEST_NOTION_TOKEN",
+        "TEST_NOTION_DB_ID_1",
+        "TEST_NOTION_DB_ID_2"
+      ]
+    },
     "build": {
       "cache": false,
       "dependsOn": ["ci", "^build", "//#check-package-jsons"]
